@@ -1,9 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:Time_to_fly@localhost:8079/web_prob"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:Time_to_fly@localhost/web_prob"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -11,8 +11,8 @@ db = SQLAlchemy(app)
 class Information(db.Model):
     __tablename__ = "web_prob"
 
-    def __init__(self, id: int, name: int, telephone: str, address: str = ""):
-        self.id = id
+    def __init__(self, name: str, telephone: str, address: str = ""):
+
         self.name = name
         self.telephone = telephone
         self.address = address
@@ -29,6 +29,24 @@ class Information(db.Model):
 @app.route("/")
 def hello():
     return render_template("home.html")
+
+
+@app.route("/form", methods=["GET", "POST"])
+def form():
+    if request.method == "POST":
+        name = request.form["name"]
+        telephone = request.form["telephone"]
+        address = request.form["address"]
+
+        info = Information(name, telephone, address)
+
+        try:
+            db.session.add(info)
+            db.session.commit()
+            return redirect("/")
+        except:
+            return "SOS"
+    return render_template("form.html")
 
 
 if __name__ == "__main__":

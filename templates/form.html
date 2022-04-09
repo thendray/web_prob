@@ -1,0 +1,17 @@
+{% extends "master_page.html" %}
+
+{% block title %}
+Форма
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <form method="post">
+        <h2>Заполните</h2>
+        <input type="text"  name="name" id="name" class="form-control" placeholder="Name"><br>
+        <input type="text"  name="telephone" id="telephone" class="form-control" placeholder="Telephone"><br>
+        <input type="text"  name="address" id="address" class="form-control" placeholder="Address"><br>
+        <input type="submit" class="btn btn-success" value="Отправить">
+    </form>
+</div>
+{% endblock %}
