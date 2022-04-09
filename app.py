@@ -49,6 +49,12 @@ def form():
     return render_template("form.html")
 
 
+@app.route("/result", methods=["POST", "GET"])
+def result():
+    info = Information.query.order_by(Information.name).all()
+    return render_template("results.html", info=info)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
