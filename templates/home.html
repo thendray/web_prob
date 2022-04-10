@@ -1,0 +1,56 @@
+{% extends "master_page.html" %}
+
+{% block title %}
+Домашняя страница
+{% endblock %}
+
+{% block body %}
+
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+          <h1 class="display-4 fw-normal">Texts</h1>
+          <p class="fs-5 text-muted"> First web-service on Flask.</p>
+</div>
+
+<div class="container">
+    <form class="form-control">
+        <div class="form-group">
+            <label for="file_input" style="padding: 10px">File input</label>
+            <input type="file" class="form-control-file" id="file_input">
+        </div>
+    </form>
+
+    <div style="padding: 30px"></div>
+
+    {% for msg in get_flashed_messages() %}
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+            {{ msg }}
+        </div>
+    </div>
+    {% endfor %}
+
+    <form class="form-control" method="post">
+        <div class="form-group">
+            <label for="filename" style="padding: 10px">File Name</label>
+            <input type="text" class="form-control" name="filename" id="filename" placeholder="Text.txt">
+        </div>
+
+        <div class="form-group">
+            <label for="text_area" style="padding: 10px">Input your text</label>
+            <textarea class="form-control" name="text_area" id="text_area" rows="5">{{text}}</textarea>
+        </div>
+
+        <div style="padding: 5px"></div>
+
+        <div class="btn-group">
+            <div style="padding: 5px"></div>
+            <button type="submit" class="btn btn-success btn-lg">Save</button>
+            <div style="padding: 5px"></div>
+            <a type="button" href="/download" class="btn btn-success btn-lg">Download</a>
+        </div>
+
+    </form>
+</div>
+
+
+{% endblock %}

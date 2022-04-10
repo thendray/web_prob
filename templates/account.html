@@ -1,0 +1,26 @@
+{% extends "master_page.html" %}
+
+{% block title %}
+Information about your account
+{% endblock %}
+
+{% block body %}
+
+
+<div class="container mt-5">
+    <h2>Name: {{current_user.name}}</h2>
+    <h2>Login: {{current_user.login}}</h2>
+    <div style="padding: 6px"></div>
+    {% for text in user_texts %}
+    <div class="alert alert-info">
+        <h2>{{ text.file_name }}</h2>
+        <p>{{ text.create_datetime }}</p>
+        <div class="btn-group">
+            <a href="/account/{{ text.id }}" class="btn btn-warning">Details</a>
+            <a type="button" href="/download/{{ text.id }}" class="btn btn-success btn-lg">Download</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
