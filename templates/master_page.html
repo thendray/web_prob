@@ -16,14 +16,14 @@
           </a>
 
           <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-              <a class="me-3 py-2 text-dark text-decoration-none" href="/">About</a>
+              <a class="me-3 py-2 text-dark text-decoration-none" href="/">About</a><br>
               {% if not current_user %}
-                <a class="me-3 py-2 text-dark text-decoration-none" href="/enter">Enter</a>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="/enter">Enter</a><br>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/registration">Registration</a>
               {% endif %}
               {% if current_user %}
-                <a class="py-2 text-dark text-decoration-none" href="#">Account</a><br>
-                <a class="py-2 text-dark text-decoration-none" href="/exit">Exit</a>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="/account">Account</a><br>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="/exit">Exit</a>
               {% endif %}
           </nav>
         </div>

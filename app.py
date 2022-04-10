@@ -50,7 +50,7 @@ class TextFile(db.Model):
 
 
 @app.route("/")
-def hello():
+def home():
     return render_template("home.html", current_user=current_user)
 
 
@@ -95,9 +95,8 @@ def enter():
         login = request.form["login"]
         password = request.form["password"]
 
-        check = User.query.filter(security.generate_password_hash(password) == User.password and User.login == login)
-
-        if check.count() > 0:
+        check = User.query.filter(User.login == login)
+        if check.count() > 0 and security.check_password_hash(User.query.first().password, password):
             current_user = check.first()
             # Вернуть домашнюю страницу авторизованного пользователя
             return redirect("/")
@@ -116,10 +115,15 @@ def sign_out():
     return redirect('/')
 
 
-# @app.route("/result", methods=["POST", "GET"])
-# def result():
-#     info = Information.query.order_by(Information.name).all()
-#     return render_template("results.html", info=info)
+@app.route("/account")
+def account():
+    user_texts = TextFile.query.filter(TextFile.user_id == current_user.id).limit(3).all()
+    return render_template("account.html", current_user=current_user, user_texts=user_texts)
+
+
+@app.route("/result")
+def result():
+    return render_template("results.html")
 
 
 if __name__ == "__main__":
