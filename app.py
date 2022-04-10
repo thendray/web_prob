@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
+from flask import Flask, render_template, request, redirect, flash, get_flashed_messages, send_file
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug import security
-
+import os
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:Time_to_fly@localhost/web_prob"
@@ -11,6 +11,9 @@ app.config['SECRET_KEY'] = "asdfgrtyeofdhggkjdjfh09586"
 db = SQLAlchemy(app)
 
 current_user = None
+current_text = ""
+current_filename = None
+
 
 
 class User(db.Model):
@@ -37,6 +40,7 @@ class TextFile(db.Model):
 
         self.text = text
         self.file_name = file_name
+        self.user_id = current_user.id
         self.create_datetime = datetime.now()
 
     id = db.Column(db.Integer, primary_key=True)
@@ -49,9 +53,27 @@ class TextFile(db.Model):
         return f"<TextFiles> {self.id}"
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("home.html", current_user=current_user)
+    global current_filename, current_text
+    text = ""
+    if request.method == "POST":
+        clean_files()
+        file_name = current_filename = request.form["filename"]
+        text = current_text = request.form["text_area"]
+        if not file_name.endswith(".txt"):
+            flash("Файл должно быть расширение .txt")
+            return render_template("home.html", current_user=current_user, text=text)
+        if current_user:
+            text_file = TextFile(file_name, text)
+            try:
+                db.session.add(text_file)
+                db.session.commit()
+
+            except Exception as error:
+                return str(error)
+    text = ""
+    return render_template("home.html", current_user=current_user, text=text)
 
 
 @app.route("/registration", methods=["GET", "POST"])
@@ -133,6 +155,49 @@ def text_detail(id: int):
 @app.route("/result")
 def result():
     return render_template("results.html")
+
+
+@app.route("/download")
+def download():
+    global current_text, current_filename
+    if current_filename and current_filename.endswith(".txt"):
+        if os.path.exists(current_filename):
+            with open(current_filename, "w") as file:
+                file.write(current_text)
+        else:
+            with open(current_filename, "x") as file:
+                file.write(current_text)
+    file = open("save_files.log", "w", encoding="utf-8")
+    file.write(f"{current_filename}\n")
+    file.close()
+    return send_file(current_filename, as_attachment=True)
+
+
+@app.route("/download/<int:id>")
+def text_download(id: int):
+    clean_files()
+    text = TextFile.query.get(id)
+
+    if os.path.exists(text.file_name):
+        with open(text.file_name, "w") as file:
+            file.write(text.text)
+    else:
+        with open(text.file_name, "x") as file:
+            file.write(text.text)
+    file = open("save_files.log", "a", encoding="utf-8")
+    file.write(f"{text.file_name}\n")
+    file.close()
+    return send_file(text.file_name, as_attachment=True)
+
+
+def clean_files():
+    with open("save_files.log", encoding='utf-8') as file:
+        line = file.readline().strip()
+        while line != "":
+            os.remove(line)
+            line = file.readline().strip()
+    file = open("save_files.log", 'w')
+    file.close()
 
 
 if __name__ == "__main__":

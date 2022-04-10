@@ -1,3 +1,5 @@
+{% extends "master_page.html" %}
+
 {% block title %}
 Text Information
 {% endblock %}
@@ -5,14 +7,13 @@ Text Information
 {% block body %}
 
 <div class="container mt-5">
-    <h1>{{ text.file_name }}</h1>
-    {% for text in user_texts %}
+
     <div class="alert alert-info">
         <h2>{{ text.file_name }}</h2>
-        <p>{{ text.create_datetime }}</p>
-        <button href="/account/{{ text.id }}" class="btn btn-warning">Детальнее</button>
+        <p>{{ text.text }}</p>
+        <p><b>{{ text.create_datetime }}</b></p>
+        <a href="/account" class="btn btn-success">OK</a>
     </div>
-    {% endfor %}
 </div>
 
 {% endblock %}

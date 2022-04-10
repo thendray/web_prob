@@ -21,24 +21,32 @@
 
     <div style="padding: 30px"></div>
 
-    <form class="form-control">
+    {% for msg in get_flashed_messages() %}
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+            {{ msg }}
+        </div>
+    </div>
+    {% endfor %}
+
+    <form class="form-control" method="post">
         <div class="form-group">
             <label for="filename" style="padding: 10px">File Name</label>
-            <input type="text" class="form-control" id="filename" placeholder="Text.txt">
+            <input type="text" class="form-control" name="filename" id="filename" placeholder="Text.txt">
         </div>
 
         <div class="form-group">
             <label for="text_area" style="padding: 10px">Input your text</label>
-            <textarea class="form-control" id="text_area" rows="5"></textarea>
+            <textarea class="form-control" name="text_area" id="text_area" rows="5">{{text}}</textarea>
         </div>
 
         <div style="padding: 5px"></div>
 
         <div class="btn-group">
             <div style="padding: 5px"></div>
-            <button type="button" class="btn btn-success btn-lg">Save</button>
+            <button type="submit" class="btn btn-success btn-lg">Save</button>
             <div style="padding: 5px"></div>
-            <button type="button" class="btn btn-success btn-lg">Download</button>
+            <a type="button" href="/download" class="btn btn-success btn-lg">Download</a>
         </div>
 
     </form>
