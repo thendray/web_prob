@@ -117,8 +117,17 @@ def sign_out():
 
 @app.route("/account")
 def account():
-    user_texts = TextFile.query.filter(TextFile.user_id == current_user.id).limit(3).all()
+    user_texts = TextFile.query.filter(
+        TextFile.user_id == current_user.id).\
+        order_by(TextFile.create_datetime.desc()).\
+        limit(3).all()
     return render_template("account.html", current_user=current_user, user_texts=user_texts)
+
+
+@app.route("/account/<int:id>")
+def text_detail(id: int):
+    text = TextFile.query.get(id)
+    return render_template("text_detail.html", text=text)
 
 
 @app.route("/result")

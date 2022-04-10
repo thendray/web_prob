@@ -1,13 +1,11 @@
 {% block title %}
-Information about your account
+Text Information
 {% endblock %}
 
 {% block body %}
 
-<h1>{{current_user.name}}</h1>
-<h1>{{current_user.login}}</h1>
-
 <div class="container mt-5">
+    <h1>{{ text.file_name }}</h1>
     {% for text in user_texts %}
     <div class="alert alert-info">
         <h2>{{ text.file_name }}</h2>
