@@ -1,0 +1,25 @@
+{% extends "master_page.html" %}
+
+{% block title %}
+Form for Enter
+{% endblock %}
+
+{% block body %}
+
+{% for msg in get_flashed_messages() %}
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+            {{ msg }}
+        </div>
+    </div>
+{% endfor %}
+
+<div class="container">
+    <form method="post">
+        <h2>Заполните</h2>
+        <input type="text"  name="login" id="login" class="form-control" placeholder="Login"><br>
+        <input type="password"  name="password" id="password" class="form-control" placeholder="Password"><br>
+        <input type="submit" class="btn btn-success" value="Sign Up">
+    </form>
+</div>
+{% endblock %}
