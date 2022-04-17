@@ -167,7 +167,7 @@ def download():
         else:
             with open(current_filename, "x") as file:
                 file.write(current_text)
-    file = open("save_files.log", "w", encoding="utf-8")
+    file = open("gitignore/save_files.log", "w", encoding="utf-8")
     file.write(f"{current_filename}\n")
     file.close()
     return send_file(current_filename, as_attachment=True)
@@ -184,19 +184,19 @@ def text_download(id: int):
     else:
         with open(text.file_name, "x") as file:
             file.write(text.text)
-    file = open("save_files.log", "a", encoding="utf-8")
+    file = open("gitignore/save_files.log", "a", encoding="utf-8")
     file.write(f"{text.file_name}\n")
     file.close()
     return send_file(text.file_name, as_attachment=True)
 
 
 def clean_files():
-    with open("save_files.log", encoding='utf-8') as file:
+    with open("gitignore/save_files.log", encoding='utf-8') as file:
         line = file.readline().strip()
         while line != "":
             os.remove(line)
             line = file.readline().strip()
-    file = open("save_files.log", 'w')
+    file = open("gitignore/save_files.log", 'w')
     file.close()
 
 
